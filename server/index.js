@@ -50,6 +50,22 @@ app.get('/books', async (req, res) => {
     }
 });
 
+// Ma'lumotlar omboridan bitta kitobni olish yo'lagi
+app.get('/books/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const foundBook = await Book.findById(id);
+
+        if (!foundBook) return res.status(404).send({ message: "Berilgan id-ga mos kitob topilmadi!" })
+
+        return res.status(200).json(foundBook);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({ message: error.message });
+    }
+});
+
 // Ma'lumotlar omboriga ulanish
 mongoose.connect(mongodbURL)
     .then(() => {
