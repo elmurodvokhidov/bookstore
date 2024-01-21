@@ -66,6 +66,25 @@ app.get('/books/:id', async (req, res) => {
     }
 });
 
+// Ma'lumotlar omborida mavjud kitobni tahrirlash
+app.put('/books/:id', async (req, res) => {
+    try {
+        if (!req.body.title || !req.body.author || !req.body.publishYear) {
+            return res.status(400).send({ message: "Talab qilingan barcha maydonlarni to'ldiring!" });
+        };
+
+        const { id } = req.params;
+        const result = await Book.findByIdAndUpdate(id, req.body);
+
+        if (!result) return res.status(404).json({ message: "Berilgan id-ga mos kitob topilmadi!" });
+
+        return res.status(200).send({ message: "Kitob muvoffaqiyatli tahrirlandi!" })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({ message: error.message })
+    }
+});
+
 // Ma'lumotlar omboriga ulanish
 mongoose.connect(mongodbURL)
     .then(() => {
