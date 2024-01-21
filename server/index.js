@@ -1,5 +1,6 @@
 import express from "express";
-import { PORT } from "./config.js";
+import { PORT, mongodbURL } from "./config.js";
+import mongoose from "mongoose";
 
 const app = express();
 
@@ -8,6 +9,12 @@ app.get('/', (req, res) => {
     return res.status(234).send("Bosh sahifa");
 });
 
-app.listen(PORT, () => {
-    console.log(`app is listening to port: ${PORT}`);
-});
+// Ma'lumotlar omboriga ulanish
+mongoose.connect(mongodbURL)
+    .then(() => {
+        console.log("Ma'lumotlar omboriga muvoffaqiyatli ulanish!");
+        app.listen(PORT, () => {
+            console.log(`${PORT} - portni eshitishni boshladim!`);
+        });
+    })
+    .catch((err) => console.log(err))
