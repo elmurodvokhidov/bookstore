@@ -78,8 +78,10 @@ function Home({ Toast }) {
             </div>
 
             {
-                showType === "table" ? (<BooksTable books={books} handleDeleteBook={handleDeleteBook} />)
-                    : (<BooksCard books={books} handleDeleteBook={handleDeleteBook} />)
+                books.length > 0 ?
+                    showType === "table" ? (<BooksTable books={books} handleDeleteBook={handleDeleteBook} />)
+                        : (<BooksCard books={books} handleDeleteBook={handleDeleteBook} />)
+                    : <h1 className="text-red-500 text-center text-3xl">Unfortunately, no books were found!</h1>
             }
         </div >
     )

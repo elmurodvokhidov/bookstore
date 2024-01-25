@@ -31,7 +31,12 @@ function CreateBook({ Toast }) {
                     title: "Book created successfully!"
                 });
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                Toast.fire({
+                    icon: "error",
+                    title: error.response.data.message
+                });
+            })
     };
 
 

@@ -42,7 +42,12 @@ function EditBook({ Toast }) {
                     title: "Book edited successfully!"
                 });
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                Toast.fire({
+                    icon: "error",
+                    title: error.response.data.message
+                });
+            })
     };
 
 
