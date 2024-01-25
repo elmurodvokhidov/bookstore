@@ -8,7 +8,7 @@ import BooksCard from "../components/home/BooksCard";
 
 function Home({ Toast }) {
     const [books, setBooks] = useState([]);
-    const [showType, setShowType] = useState("table");
+    const [showType, setShowType] = useState(localStorage.getItem("showType") || "table");
 
     // Barcha kitoblarni olish funksiyasi
     function getBook() {
@@ -47,13 +47,25 @@ function Home({ Toast }) {
         });
     };
 
+    // Kitoblar ro'yhatini table ko'rinishiga o'tkazuvchi funksiya
+    function handleShowTable() {
+        localStorage.setItem("showType", "table")
+        setShowType(localStorage.getItem("showType") || "table");
+    };
+
+    // Kitoblar ro'yhatini card ko'rinishiga o'tkazuvchi funksiya
+    function handleShowCard() {
+        localStorage.setItem("showType", "card");
+        setShowType(localStorage.getItem("showType") || "card");
+    };
+
     return (
         <div className="p-4">
             <div className="flex justify-center items-center gap-x-4">
-                <button className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg" onClick={() => setShowType("table")}>
+                <button className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg" onClick={handleShowTable}>
                     Table
                 </button>
-                <button className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg" onClick={() => setShowType("card")}>
+                <button className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg" onClick={handleShowCard}>
                     Card
                 </button>
             </div>
@@ -69,7 +81,7 @@ function Home({ Toast }) {
                 showType === "table" ? (<BooksTable books={books} handleDeleteBook={handleDeleteBook} />)
                     : (<BooksCard books={books} handleDeleteBook={handleDeleteBook} />)
             }
-        </div>
+        </div >
     )
 }
 
