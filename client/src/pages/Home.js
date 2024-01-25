@@ -4,16 +4,47 @@ import { Link } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
+import Swal from 'sweetalert2'
 
-function Home() {
+function Home({ Toast }) {
     const [books, setBooks] = useState([]);
 
-    useEffect(() => {
+    // Barcha kitoblarni olish funksiyasi
+    function getBook() {
         axios.get("http://localhost:5000/books")
             .then(res => {
                 setBooks(res.data.data);
             }).catch(error => console.log(error))
+    };
+
+    useEffect(() => {
+        getBook();
     }, []);
+
+    // Kitobni o'chirib yuborish funksiyasi
+    function handleDeleteBook(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:5000/books/${id}`)
+                    .then(() => {
+                        getBook();
+                        Toast.fire({
+                            icon: "success",
+                            title: "Book deleted successfully!"
+                        });
+                    })
+                    .catch(error => console.log(error))
+            };
+        });
+    };
 
     return (
         <div className="p-4">
@@ -51,7 +82,7 @@ function Home() {
                                             <Link to={`/books/edit/${book._id}`}>
                                                 <AiOutlineEdit className="text-2xl text-yellow-600" />
                                             </Link>
-                                            <button>
+                                            <button onClick={() => handleDeleteBook(book._id)}>
                                                 <MdOutlineDelete className="text-2xl text-red-600" />
                                             </button>
                                         </div>

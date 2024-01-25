@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import BackBtn from '../components/BackBtn';
 
-function EditBook() {
+function EditBook({ Toast }) {
+    // Input-dan olingan ma'lumotlar \/ Yangi kitob
     const [inputValue, setInputValue] = useState({
         title: "",
         author: "",
@@ -12,8 +13,10 @@ function EditBook() {
 
     const navigate = useNavigate();
 
+    // Tahrirlanishi kerak bo'lgan kitob id raqami
     const { id } = useParams();
 
+    // Tahrirlanishi kerak bo'lgan kitobni ma'lumotlar omboridan olib kelish
     useEffect(() => {
         axios.get(`http://localhost:5000/books/${id}`)
             .then(res => setInputValue(res.data))
@@ -21,6 +24,7 @@ function EditBook() {
     }, [id])
 
 
+    // Input-dan ma'lumot olish funksiyasi
     function getInputValue(e) {
         setInputValue({
             ...inputValue,
@@ -28,10 +32,15 @@ function EditBook() {
         });
     };
 
+    // Kitobni tahrirlash funksiyasi
     function handleEditBook() {
         axios.put(`http://localhost:5000/books/${id}`, inputValue)
             .then(() => {
                 navigate("/");
+                Toast.fire({
+                    icon: "success",
+                    title: "Book edited successfully!"
+                });
             })
             .catch(error => console.log(error))
     };

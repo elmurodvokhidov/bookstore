@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import BackBtn from '../components/BackBtn';
 
-function CreateBook() {
+function CreateBook({ Toast }) {
+    // Input-dan olingan ma'lumotlar \/ Yangi kitob
     const [inputValue, setInputValue] = useState({
         title: "",
         author: "",
@@ -12,6 +13,7 @@ function CreateBook() {
 
     const navigate = useNavigate();
 
+    // Input-dan ma'lumot olish funksiyasi
     function getInputValue(e) {
         setInputValue({
             ...inputValue,
@@ -19,10 +21,15 @@ function CreateBook() {
         });
     };
 
+    // Yangi kitob qo'shish funksiyasi
     function handleSaveBook() {
         axios.post("http://localhost:5000/books", inputValue)
             .then(() => {
                 navigate("/");
+                Toast.fire({
+                    icon: "success",
+                    title: "Book created successfully!"
+                });
             })
             .catch(error => console.log(error))
     };
